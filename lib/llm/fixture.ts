@@ -37,11 +37,11 @@ export class FixtureProvider implements Provider {
       'constraint: narration is limited to the supplied payload; no external knowledge is available to this provider',
     ];
 
-    const text = [
-      payload.headline,
-      '',
-      ...payload.sections.flatMap((s) => [`## ${s.heading}`, '', ...s.paragraphs, '']),
-    ]
+    // `headline` is context for the live provider, not body copy: the interface
+    // already renders the verdict above the narrative, and repeating it here just
+    // makes the reader scan the same sentence twice.
+    const text = payload.sections
+      .flatMap((s) => [`## ${s.heading}`, '', ...s.paragraphs, ''])
       .join('\n')
       .trim();
 

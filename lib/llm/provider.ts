@@ -98,7 +98,9 @@ const ROUTES: Record<Task, RouteDecision> = {
 
 export const ESCALATION: RouteDecision = {
   tier: 'tier-3',
-  model: 'claude-opus-4-5',
+  // Left unnamed deliberately: the frontier vendor is M3M's commercial choice at
+  // pilot, and the routing layer does not care which one sits behind this tier.
+  model: 'configurable — frontier tier',
   deployment: 'india-region-cloud',
   residency: 'IN — Mumbai region',
   rationale:

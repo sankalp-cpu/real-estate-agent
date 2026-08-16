@@ -8,7 +8,12 @@
  */
 
 import type { Database } from 'better-sqlite3';
-import { searchAuthorities, searchDocuments, type AuthorityHit, type Hit } from './retrieval.ts';
+import {
+  searchAuthorities,
+  searchDocuments,
+  type AuthorityHit,
+  type DocumentHit,
+} from './retrieval.ts';
 import { getProvider, type GenerateResult, type NarrationPayload } from './llm/index.ts';
 
 export type Citation = AuthorityHit;
@@ -53,7 +58,7 @@ export type PropositionAnalysis = {
   balanced: Citation[];
   currencyWarnings: CurrencyWarning[];
   narrative: string;
-  documentHits: Hit[];
+  documentHits: DocumentHit[];
   retrieval: Citation[];
   telemetry: Telemetry;
 };
@@ -191,50 +196,51 @@ export async function analyseProposition(
   const balanced = hits.filter((h) => h.favours === 'balanced' && h.status !== 'overruled');
   const warnings = currencyWarnings(hits);
 
+  // The narrative is a counsel's note, and the authority cards beside it are the
+  // evidence. Anything enumerated on a card is deliberately not restated here —
+  // a note that repeats its own exhibits is one nobody reads twice.
+  const cite = (h: Citation) => `${h.caseTitle}, ${h.citation}`;
+
   const payload: NarrationPayload = {
     headline: verdict.headline,
     escalate: verdict.stance === 'no_authority',
     sections: [
       {
-        heading: 'Position',
+        heading: 'Note',
         paragraphs: [
-          `Proposition put: ${proposition}`,
-          verdict.headline,
-          `Retrieved ${hits.length} authorities from ${corpusSize(db)} indexed passages. ` +
-            `${assisting.length} assist M3M's position, ${adverse.length} cut against it, ` +
-            `${balanced.length} cut both ways.`,
+          verdict.stance === 'no_authority'
+            ? `The proposition put was: ${proposition} Nothing in the indexed corpus bears on it.`
+            : `The proposition put was: ${proposition}`,
+          ...(adverse.length
+            ? [
+                `Against the proposition, the governing authority is ${cite(adverse[0])}` +
+                  (adverse.length > 1
+                    ? `, with ${adverse.length - 1} further ${
+                        adverse.length === 2 ? 'decision' : 'decisions'
+                      } to the same effect.`
+                    : '.'),
+              ]
+            : []),
+          ...(assisting.length
+            ? [
+                `In support, ${cite(assisting[0])}` +
+                  (assisting.length > 1
+                    ? ` and ${assisting.length - 1} further ${
+                        assisting.length === 2 ? 'decision' : 'decisions'
+                      }.`
+                    : '.'),
+              ]
+            : []),
+          ...(balanced.length
+            ? [
+                `${cite(balanced[0])}${
+                  balanced.length > 1 ? ` and ${balanced.length - 1} others` : ''
+                } cut both ways, depending on how the claim is characterised.`,
+              ]
+            : []),
+          `Searched ${corpusSize(db)} indexed passages; ${hits.length} met the relevance threshold.`,
         ],
       },
-      ...(adverse.length
-        ? [
-            {
-              heading: 'Authority against M3M',
-              paragraphs: adverse.map(
-                (h) => `${h.caseTitle}, ${h.citation} (${h.court}) — ${h.holding}`,
-              ),
-            },
-          ]
-        : []),
-      ...(assisting.length
-        ? [
-            {
-              heading: 'Authority assisting M3M',
-              paragraphs: assisting.map(
-                (h) => `${h.caseTitle}, ${h.citation} (${h.court}) — ${h.holding}`,
-              ),
-            },
-          ]
-        : []),
-      ...(balanced.length
-        ? [
-            {
-              heading: 'Authority cutting both ways',
-              paragraphs: balanced.map(
-                (h) => `${h.caseTitle}, ${h.citation} — ${h.holding}`,
-              ),
-            },
-          ]
-        : []),
       ...(warnings.length
         ? [
             {
@@ -242,18 +248,24 @@ export async function analyseProposition(
               paragraphs: warnings.map(
                 (w) =>
                   `${w.caseTitle}, ${w.citation} is ${w.status}. ${w.note}` +
-                  (w.supersededBy ? ` See ${w.supersededBy.caseTitle}, ${w.supersededBy.citation}.` : ''),
+                  (w.supersededBy
+                    ? ` See ${w.supersededBy.caseTitle}, ${w.supersededBy.citation}.`
+                    : ''),
               ),
             },
           ]
         : []),
-      {
-        heading: 'How to take the point',
-        paragraphs: hits
-          .filter((h) => h.counterPoint)
-          .slice(0, 5)
-          .map((h) => `On ${h.caseTitle}: ${h.counterPoint}`),
-      },
+      ...(hits.some((h) => h.counterPoint && h.status !== 'overruled')
+        ? [
+            {
+              heading: 'Recommended approach',
+              paragraphs: [...adverse, ...assisting, ...balanced]
+                .filter((h) => h.counterPoint)
+                .slice(0, 3)
+                .map((h) => `On ${h.caseTitle} — ${h.counterPoint}`),
+            },
+          ]
+        : []),
     ],
   };
 

@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+/*
+ * A deliberately sober palette. The interface sits alongside pleadings and
+ * board papers, and legal readers distrust software that looks like a consumer
+ * app. Ink, paper, a single restrained accent, and colour reserved for meaning:
+ * red is overruled, amber is distinguished, nothing else earns it.
+ */
+@theme {
+  --color-ink-50: #f6f6f4;
+  --color-ink-100: #ecebe7;
+  --color-ink-200: #d9d7d0;
+  --color-ink-300: #b8b4a9;
+  --color-ink-400: #8e8a7d;
+  --color-ink-500: #6b6759;
+  --color-ink-600: #4f4c41;
+  --color-ink-700: #3a382f;
+  --color-ink-800: #26251f;
+  --color-ink-900: #161612;
+
+  --color-accent-50: #eef4f7;
+  --color-accent-100: #d5e5ec;
+  --color-accent-500: #2f6f8f;
+  --color-accent-600: #255a75;
+  --color-accent-700: #1c455b;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--color-ink-50);
+  color: var(--color-ink-800);
+}
+
+/* Rendered analyst output. */
+.prose-legal h2 {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-ink-400);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.prose-legal h2:first-child {
+  margin-top: 0;
+}
+.prose-legal p {
+  margin-bottom: 0.6rem;
+  line-height: 1.65;
+}
+.prose-legal p:last-child {
+  margin-bottom: 0;
+}
+
+/* Marks a passage as retrieved rather than generated. */
+.passage {
+  font-family: var(--font-serif);
+  line-height: 1.7;
+}

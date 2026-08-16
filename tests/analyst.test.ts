@@ -102,7 +102,7 @@ test('a proposition with no authority in the corpus returns no_authority, not a 
   assert.equal(analysis.verdict.stance, 'no_authority');
   assert.equal(analysis.assisting.length, 0);
   assert.equal(analysis.adverse.length, 0);
-  assert.match(analysis.narrative, /No authority on this point/i);
+  assert.match(analysis.narrative, /Nothing in the indexed corpus bears on it/i);
 });
 
 test('a proposition supported by authority is reported as available', async () => {

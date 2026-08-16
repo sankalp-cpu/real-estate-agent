@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Generated database — rebuilt by `npm run seed`
+db/m3m.sqlite
+db/m3m.sqlite-journal
+db/m3m.sqlite-wal
+db/m3m.sqlite-shm
+
+.env
+.env.local
+.DS_Store
+tests/screenshots/

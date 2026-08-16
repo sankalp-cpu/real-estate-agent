@@ -1,0 +1,29 @@
+{
+  "name": "m3m-legal-ai-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Litigation-focused legal AI prototype for M3M India — grounded precedent analysis, document repository and drafting studio.",
+  "scripts": {
+    "seed": "node --experimental-strip-types db/seed/index.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "smoke": "node --experimental-strip-types tests/smoke.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "next": "^15.5.23",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}

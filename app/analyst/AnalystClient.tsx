@@ -328,8 +328,11 @@ function PleadingResult({ analysis }: { analysis: PleadingAnalysis }) {
 
               {isOpen && (
                 <div className="border-t border-ink-100 bg-ink-50/40 px-4 py-4">
-                  <p className="mb-3 text-[12px] leading-relaxed text-ink-600">
-                    {g.verdict.headline}
+                  {/* The chip above already states the stance; repeating the full
+                      verdict sentence on every ground just adds scrolling. */}
+                  <p className="mb-3 font-mono text-[11px] text-ink-400">
+                    {g.adverse.length} against · {g.assisting.length} assisting ·{' '}
+                    {g.verdict.confidence} confidence
                   </p>
 
                   {g.counterPoints.length > 0 && (

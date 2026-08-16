@@ -367,6 +367,24 @@ export async function analysePleading(
   const allHits = findings.flatMap((f) => [...f.assisting, ...f.adverse]);
   const overallVerdict = buildVerdict(allHits);
 
+  // One authority commonly answers several grounds. The verdict counts it each
+  // time — a case cited against three grounds carries more weight than one cited
+  // against one — but the grounding panel lists each passage once.
+  const uniqueHits = [...new Map(allHits.map((h) => [h.paraId, h])).values()].sort(
+    (a, b) => b.score - a.score,
+  );
+
+  // A covering note over the grounds, not a restatement of them: the interface
+  // renders each ground with its own authorities and counter-argument, and a note
+  // that repeats all of that underneath is one nobody reads.
+  const byStance = (s: Verdict['stance']) =>
+    findings.filter((f) => f.verdict.stance === s).map((f) => f.label);
+
+  const against = byStance('against');
+  const available = byStance('available');
+  const contested = byStance('contested');
+  const unanswered = findings.filter((f) => f.verdict.stance === 'no_authority');
+
   const payload: NarrationPayload = {
     headline: `Analysis of ${findings.length} grounds asserted in the pleading filed against M3M.`,
     sections: [
@@ -374,25 +392,38 @@ export async function analysePleading(
         heading: 'Summary',
         paragraphs: [
           overallVerdict.headline,
-          `Grounds on which the authority runs against M3M: ${
-            findings.filter((f) => f.verdict.stance === 'against').map((f) => f.label).join(', ') || 'none'
-          }.`,
-          `Grounds on which M3M has authority to rely: ${
-            findings.filter((f) => f.verdict.stance === 'available').map((f) => f.label).join(', ') || 'none'
-          }.`,
-          `Grounds genuinely contested: ${
-            findings.filter((f) => f.verdict.stance === 'contested').map((f) => f.label).join(', ') || 'none'
-          }.`,
+          against.length
+            ? `The authority runs against M3M on ${against.length} of ${findings.length} grounds (${against.join(', ')}). On these the argument is quantum, characterisation or maintainability, not entitlement.`
+            : 'No ground is squarely foreclosed by authority.',
+          ...(available.length
+            ? [`M3M has authority to rely on for ${available.join(', ')}.`]
+            : []),
+          ...(contested.length ? [`Genuinely contested: ${contested.join(', ')}.`] : []),
+          ...(unanswered.length
+            ? [
+                `No authority in the indexed corpus bears on ${unanswered
+                  .map((f) => f.label)
+                  .join(', ')}. Research ${
+                  unanswered.length === 1 ? 'this ground' : 'these grounds'
+                } outside the system before settling the reply.`,
+              ]
+            : []),
         ],
       },
-      ...findings.map((f) => ({
-        heading: `${f.label} — ${f.verdict.stance.replace('_', ' ')}`,
+      {
+        heading: 'Order of priority',
         paragraphs: [
-          f.text.length > 400 ? f.text.slice(0, 400) + '…' : f.text,
-          f.verdict.headline,
-          ...f.counterPoints.map((c) => `Answer — ${c.caseTitle}, ${c.citation}: ${c.point}`),
+          'Take the grounds in the order the exposure sits, not the order they are pleaded.',
+          ...findings
+            .filter((f) => f.counterPoints.length > 0)
+            .sort((a, b) => b.verdict.adverseWeight - a.verdict.adverseWeight)
+            .slice(0, 3)
+            .map(
+              (f) =>
+                `${f.label} — the governing authority is ${f.counterPoints[0].caseTitle}, ${f.counterPoints[0].citation}.`,
+            ),
         ],
-      })),
+      },
     ],
   };
 
@@ -404,8 +435,8 @@ export async function analysePleading(
     grounds: findings,
     overallVerdict,
     narrative: generated.text,
-    retrieval: allHits,
-    telemetry: telemetryFrom(generated, retrievalMs, corpusSize(db), allHits.length),
+    retrieval: uniqueHits,
+    telemetry: telemetryFrom(generated, retrievalMs, corpusSize(db), uniqueHits.length),
   };
 }
 

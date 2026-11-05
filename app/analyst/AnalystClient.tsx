@@ -8,8 +8,8 @@ import { GroundingPanel } from '../components/GroundingPanel.tsx';
 type Analysis = PropositionAnalysis | PleadingAnalysis;
 
 const VERDICT_STYLE: Record<Verdict['stance'], { chip: string; label: string }> = {
-  available: { chip: 'border-emerald-300 bg-emerald-50 text-emerald-900', label: 'Available to M3M' },
-  against: { chip: 'border-red-300 bg-red-50 text-red-900', label: 'Runs against M3M' },
+  available: { chip: 'border-emerald-300 bg-emerald-50 text-emerald-900', label: 'Available to the developer' },
+  against: { chip: 'border-red-300 bg-red-50 text-red-900', label: 'Runs against the developer' },
   contested: { chip: 'border-amber-300 bg-amber-50 text-amber-900', label: 'Genuinely contested' },
   no_authority: { chip: 'border-ink-300 bg-ink-100 text-ink-800', label: 'No authority found' },
 };
@@ -95,7 +95,7 @@ export function AnalystClient({
               placeholder={
                 mode === 'proposition'
                   ? 'State the proposition. For example: a clause capping delay compensation at Rs 10 per square foot per month limits our liability to the allottee.'
-                  : 'Paste the pleading filed against M3M. Each numbered ground will be researched independently.'
+                  : 'Paste the pleading filed against the developer. Each numbered ground will be researched independently.'
               }
               className="w-full resize-y rounded border border-ink-200 bg-ink-50/40 px-3 py-2.5 font-sans text-[13px] leading-relaxed text-ink-800 outline-none placeholder:text-ink-300 focus:border-accent-500 focus:bg-white"
             />
@@ -265,7 +265,7 @@ function PropositionResult({ analysis }: { analysis: PropositionAnalysis }) {
       )}
 
       {analysis.adverse.length > 0 && (
-        <Section title="Against M3M" subtitle="What the other side will cite.">
+        <Section title="Against the developer" subtitle="What the other side will cite.">
           {analysis.adverse.map((h) => (
             <AuthorityCard key={h.paraId} hit={h} />
           ))}
@@ -273,7 +273,7 @@ function PropositionResult({ analysis }: { analysis: PropositionAnalysis }) {
       )}
 
       {analysis.assisting.length > 0 && (
-        <Section title="Assisting M3M">
+        <Section title="Assisting the developer">
           {analysis.assisting.map((h) => (
             <AuthorityCard key={h.paraId} hit={h} />
           ))}

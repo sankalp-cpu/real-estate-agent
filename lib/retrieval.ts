@@ -23,8 +23,8 @@ export type AuthorityHit = {
   statusNote: string | null;
   supersededBy: { id: string; caseTitle: string; citation: string } | null;
   sourceUrl: string;
-  /** M3M's editorial stance layer — advocacy, not part of the case record. */
-  favours: 'm3m' | 'opponent' | 'balanced';
+  /** Developer editorial stance layer — advocacy, not part of the case record. */
+  favours: 'developer' | 'opponent' | 'balanced';
   counterPoint: string | null;
   locator: string;
   body: string;

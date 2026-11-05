@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { getDb } from '../../../lib/db.ts';
 import { analyseProposition, analysePleading } from '../../../lib/analyst.ts';
-import { currentUser, visibleMatterIds } from '../../../lib/session.ts';
+import { currentUser, visibleMatterIds, canReachMatter } from '../../../lib/session.ts';
 
 export async function POST(req: Request) {
   const { mode, text, matterId } = (await req.json()) as {
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     matterId?: string | null;
   };
 
-  if (!text || text.trim().length < 12) {
+  if (typeof text !== 'string' || text.trim().length < 12 || text.length > 100000) {
     return NextResponse.json(
       { error: 'Enter a proposition or paste a pleading to analyse.' },
       { status: 400 },
@@ -20,6 +20,12 @@ export async function POST(req: Request) {
 
   const db = getDb();
   const user = await currentUser();
+  if (matterId && !canReachMatter(user, matterId)) {
+    return NextResponse.json({ error: 'This matter is not accessible.' }, { status: 403 });
+  }
+  if (matterId && !db.prepare('SELECT id FROM matters WHERE id=?').get(matterId)) {
+    return NextResponse.json({ error: 'Unknown matter.' }, { status: 404 });
+  }
   const scope = visibleMatterIds(user);
 
   const analysis =

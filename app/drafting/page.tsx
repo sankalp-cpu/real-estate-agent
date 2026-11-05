@@ -21,10 +21,10 @@ export default async function DraftingPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-[22px] font-semibold tracking-tight text-ink-900">Drafting Studio</h1>
+        <h1 className="page-heading">Draft</h1>
         <p className="mt-1 max-w-3xl text-[13px] leading-relaxed text-ink-500">
           Standard documents assembled from the approved template and the clause library, filled
-          from matter variables. Every clause carries a risk level, and any departure from M3M's
+          from matter variables. Every clause carries a risk level, and any departure from the
           approved position is redlined before the draft leaves the building. Assembly is
           deterministic — the same inputs produce the same document every time.
         </p>

@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import path from 'node:path';
 import fs from 'node:fs';
 
-export const DB_PATH = path.join(process.cwd(), 'db', 'm3m.sqlite');
+export const DB_PATH = path.join(process.cwd(), 'db', 'real-estate.sqlite');
 
 let instance: Database.Database | null = null;
 

@@ -20,7 +20,7 @@ let db: Database.Database;
 let dbPath: string;
 
 before(() => {
-  dbPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'm3m-')), 'test.sqlite');
+  dbPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'rea-')), 'test.sqlite');
   seed(dbPath);
   db = new Database(dbPath, { readonly: true });
 });
@@ -175,7 +175,7 @@ test('each ground produces a counter-argument tied to a real authority', async (
   }
 });
 
-test('the forfeiture ground is correctly identified as running against M3M', async () => {
+test('the forfeiture ground is correctly identified as running against the developer', async () => {
   const analysis = await analysePleading(db, PLEADING_TEXT);
   const forfeiture = analysis.grounds.find((g) => /forfeiture of the entire earnest money/i.test(g.text));
   assert.ok(forfeiture, 'expected a ground on forfeiture');
@@ -205,11 +205,11 @@ test('every authority carries a stance and every overruled authority names its s
   }
 });
 
-test('telemetry reports the routing decision and on-premise residency', async () => {
+test('telemetry reports routing and explicitly identifies fixture residency', async () => {
   const analysis = await analyseProposition(db, 'delay in possession compensation');
   assert.equal(analysis.telemetry.tier, 'tier-2');
-  assert.match(analysis.telemetry.model, /m3m-legal-40b/);
-  assert.match(analysis.telemetry.residency, /^IN —/);
+  assert.match(analysis.telemetry.model, /demo-legal-40b/);
+  assert.match(analysis.telemetry.residency, /Demo sandbox/);
   assert.ok(analysis.telemetry.retrievalMs >= 0);
   assert.ok(analysis.telemetry.passagesSearched > 0);
 });

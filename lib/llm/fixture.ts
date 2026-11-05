@@ -52,10 +52,10 @@ export class FixtureProvider implements Provider {
 
     return {
       text,
-      model: `${decision.model} (${decision.deployment})`,
+      model: `${decision.model} (demo fixture)`,
       tier: decision.tier,
-      deployment: decision.deployment,
-      residency: decision.residency,
+      deployment: 'Deterministic demo fixture',
+      residency: 'Demo sandbox; no residency guarantee',
       latencyMs,
       costInr: estimateCostInr(decision, text),
       trace,

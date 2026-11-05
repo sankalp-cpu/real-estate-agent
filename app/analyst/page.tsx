@@ -48,7 +48,7 @@ export default async function AnalystPage() {
         <p className="mt-1 max-w-3xl text-[13px] leading-relaxed text-ink-500">
           Put a proposition of law and see what the Supreme Court and the High Courts have said —
           what supports it, what cuts against it, and whether the leading case is still good law. Or
-          paste the pleading filed against M3M and get each ground researched and answered.
+          paste the pleading filed against the developer and get each ground researched and answered.
         </p>
       </header>
 

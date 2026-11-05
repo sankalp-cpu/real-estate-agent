@@ -110,7 +110,7 @@ function buildVerdict(hits: Citation[]): Verdict {
     };
   }
 
-  const assisting = live.filter((h) => h.favours === 'm3m').reduce((s, h) => s + weightOf(h), 0);
+  const assisting = live.filter((h) => h.favours === 'developer').reduce((s, h) => s + weightOf(h), 0);
   const adverse = live.filter((h) => h.favours === 'opponent').reduce((s, h) => s + weightOf(h), 0);
   const total = assisting + adverse;
 
@@ -134,7 +134,7 @@ function buildVerdict(hits: Citation[]): Verdict {
     return {
       stance: 'available',
       headline:
-        'The weight of retrieved authority supports this position. It is available to M3M, subject to the qualifications noted below.',
+        'The weight of retrieved authority supports this position. It is available to the developer, subject to the qualifications noted below.',
       confidence: strong ? 'high' : 'moderate',
       assistingWeight: round(assisting),
       adverseWeight: round(adverse),
@@ -191,7 +191,7 @@ export async function analyseProposition(
   const retrievalMs = Math.round(performance.now() - t0);
 
   const verdict = buildVerdict(hits);
-  const assisting = hits.filter((h) => h.favours === 'm3m' && h.status !== 'overruled');
+  const assisting = hits.filter((h) => h.favours === 'developer' && h.status !== 'overruled');
   const adverse = hits.filter((h) => h.favours === 'opponent' && h.status !== 'overruled');
   const balanced = hits.filter((h) => h.favours === 'balanced' && h.status !== 'overruled');
   const warnings = currencyWarnings(hits);
@@ -336,7 +336,7 @@ export async function analysePleading(
   const findings: GroundFinding[] = grounds.map((g) => {
     const hits = searchAuthorities(db, g.text, 8);
     const verdict = buildVerdict(hits);
-    const assisting = hits.filter((h) => h.favours === 'm3m' && h.status !== 'overruled');
+    const assisting = hits.filter((h) => h.favours === 'developer' && h.status !== 'overruled');
     const adverse = hits.filter((h) => h.favours === 'opponent' && h.status !== 'overruled');
 
     // The counter-argument. Ordered so that the points answering the strongest
@@ -386,17 +386,17 @@ export async function analysePleading(
   const unanswered = findings.filter((f) => f.verdict.stance === 'no_authority');
 
   const payload: NarrationPayload = {
-    headline: `Analysis of ${findings.length} grounds asserted in the pleading filed against M3M.`,
+    headline: `Analysis of ${findings.length} grounds asserted in the pleading filed against the developer.`,
     sections: [
       {
         heading: 'Summary',
         paragraphs: [
           overallVerdict.headline,
           against.length
-            ? `The authority runs against M3M on ${against.length} of ${findings.length} grounds (${against.join(', ')}). On these the argument is quantum, characterisation or maintainability, not entitlement.`
+            ? `The authority runs against the developer on ${against.length} of ${findings.length} grounds (${against.join(', ')}). On these the argument is quantum, characterisation or maintainability, not entitlement.`
             : 'No ground is squarely foreclosed by authority.',
           ...(available.length
-            ? [`M3M has authority to rely on for ${available.join(', ')}.`]
+            ? [`The developer has authority to rely on for ${available.join(', ')}.`]
             : []),
           ...(contested.length ? [`Genuinely contested: ${contested.join(', ')}.`] : []),
           ...(unanswered.length

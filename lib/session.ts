@@ -20,8 +20,8 @@ export type User = {
   initials: string;
 };
 
-export const SESSION_COOKIE = 'm3m_user';
-const DEFAULT_USER = 'u-counsel-1';
+export const SESSION_COOKIE = 'rea_user';
+const DEFAULT_USER = 'u-head';
 
 export function listUsers(): User[] {
   return getDb().prepare('SELECT * FROM users ORDER BY role, name').all() as User[];

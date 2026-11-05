@@ -7,8 +7,8 @@ const STATUS_STYLE = {
 } as const;
 
 const FAVOURS_STYLE = {
-  m3m: { chip: 'bg-accent-50 text-accent-700 border-accent-100', label: 'Assists M3M' },
-  opponent: { chip: 'bg-ink-100 text-ink-700 border-ink-200', label: 'Against M3M' },
+  developer: { chip: 'bg-accent-50 text-accent-700 border-accent-100', label: 'Assists the developer' },
+  opponent: { chip: 'bg-ink-100 text-ink-700 border-ink-200', label: 'Against the developer' },
   balanced: { chip: 'bg-ink-50 text-ink-500 border-ink-200', label: 'Cuts both ways' },
 } as const;
 
@@ -96,7 +96,7 @@ export function AuthorityCard({
           <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-400">
             How to take the point
             <span className="ml-1.5 normal-case tracking-normal text-ink-300">
-              — M3M position, not part of the case record
+              — developer position, not part of the case record
             </span>
           </p>
           <p className="text-[13px] leading-relaxed text-ink-700">{hit.counterPoint}</p>

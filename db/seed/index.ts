@@ -1,15 +1,17 @@
 /**
- * Builds db/m3m.sqlite from scratch. Idempotent: drops and rebuilds.
+ * Builds db/real-estate.sqlite from scratch. Idempotent: drops and rebuilds.
  *
  *   npm run seed
  */
 
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { createDb, DB_PATH } from '../../lib/db.ts';
 import { AUTHORITIES, sourceUrlFor } from './authorities.ts';
 import { STANCES } from './stances.ts';
 import { USERS, MATTERS, DOCUMENTS } from './workspace.ts';
 import { TEMPLATES, CLAUSES } from './templates.ts';
+import { seedDemo } from './demo.ts';
 
 const now = '2026-08-16T06:00:00Z';
 
@@ -153,19 +155,20 @@ function seed(targetPath: string) {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   );
   const audits: Array<[string, string, string, string | null, string | null, string, number | null, string]> = [
-    ['u-counsel-1', 'analysis.proposition', 'Delay compensation ceiling under a one-sided clause', 'm3m-legal-40b (on-prem)', 'tier-2', 'IN — Gurugram DC', 2140, '2026-08-15T06:02:00Z'],
-    ['u-counsel-1', 'analysis.pleading', 'Consumer Complaint No. 1184 of 2026', 'm3m-legal-40b (on-prem)', 'tier-2', 'IN — Gurugram DC', 4820, '2026-08-15T06:11:00Z'],
-    ['u-counsel-2', 'draft.generate', 'Leave and License — Nexlayer Technologies', 'm3m-draft-8b (on-prem)', 'tier-1', 'IN — Gurugram DC', 640, '2026-08-15T07:22:00Z'],
+    ['u-counsel-1', 'analysis.proposition', 'Delay compensation ceiling under a one-sided clause', 'demo-legal (fixture)', 'tier-2', 'Seeded example', 2140, '2026-08-15T06:02:00Z'],
+    ['u-counsel-1', 'analysis.pleading', 'Consumer Complaint No. 1184 of 2026', 'demo-legal (fixture)', 'tier-2', 'Seeded example', 4820, '2026-08-15T06:11:00Z'],
+    ['u-counsel-2', 'draft.generate', 'Leave and License — Nexlayer Technologies', 'demo-draft (fixture)', 'tier-1', 'Seeded example', 640, '2026-08-15T07:22:00Z'],
     ['u-para', 'document.ingest', 'Title chain abstract — Sector 91', 'ocr-pipeline', 'tier-0', 'IN — Gurugram DC', 18400, '2026-08-15T10:05:00Z'],
     ['u-head', 'repository.search', 'unilateral arbitrator appointment', null, 'tier-0', 'IN — Gurugram DC', 38, '2026-08-15T12:48:00Z'],
     ['u-admin', 'admin.routing_change', 'Tier 3 escalation threshold', null, null, 'IN — Gurugram DC', null, '2026-08-15T13:02:00Z'],
   ];
   audits.forEach((a, i) => insertAudit.run(`aud-${i}`, ...a));
 
+  seedDemo(db);
   const counts = {
     users: USERS.length,
-    matters: MATTERS.length,
-    documents: DOCUMENTS.length,
+    matters: (db.prepare('SELECT COUNT(*) n FROM matters').get() as { n: number }).n,
+    documents: (db.prepare('SELECT COUNT(*) n FROM documents').get() as { n: number }).n,
     docChunks: db.prepare('SELECT COUNT(*) AS n FROM doc_chunks').get() as { n: number },
     authorities: AUTHORITIES.length,
     authorityParas: db.prepare('SELECT COUNT(*) AS n FROM authority_paras').get() as { n: number },
@@ -177,15 +180,16 @@ function seed(targetPath: string) {
   return counts;
 }
 
-const target = process.argv[2] ? path.resolve(process.argv[2]) : DB_PATH;
-const counts = seed(target);
-
-console.log(`Seeded ${target}`);
-console.log(`  users            ${counts.users}`);
-console.log(`  matters          ${counts.matters}`);
-console.log(`  documents        ${counts.documents} (${counts.docChunks.n} indexed passages)`);
-console.log(`  authorities      ${counts.authorities} (${counts.authorityParas.n} indexed passages)`);
-console.log(`  templates        ${counts.templates}`);
-console.log(`  clauses          ${counts.clauses}`);
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  const target = process.argv[2] ? path.resolve(process.argv[2]) : DB_PATH;
+  const counts = seed(target);
+  console.log(`Seeded ${target}`);
+  console.log(`  users            ${counts.users}`);
+  console.log(`  matters          ${counts.matters}`);
+  console.log(`  documents        ${counts.documents} (${counts.docChunks.n} indexed passages)`);
+  console.log(`  authorities      ${counts.authorities} (${counts.authorityParas.n} indexed passages)`);
+  console.log(`  templates        ${counts.templates}`);
+  console.log(`  clauses          ${counts.clauses}`);
+}
 
 export { seed };

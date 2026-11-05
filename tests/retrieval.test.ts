@@ -11,7 +11,7 @@ let db: Database.Database;
 let dbPath: string;
 
 before(() => {
-  dbPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'm3m-')), 'test.sqlite');
+  dbPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'rea-')), 'test.sqlite');
   seed(dbPath);
   db = new Database(dbPath, { readonly: true });
 });

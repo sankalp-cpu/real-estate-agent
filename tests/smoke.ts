@@ -44,6 +44,7 @@ async function main() {
   }
 
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  await context.addInitScript(() => localStorage.setItem('rea-tour-seen', '1'));
   const page = await context.newPage();
   page.on('console', (m) => {
     if (m.type() === 'error') consoleErrors.push(m.text());
@@ -54,15 +55,15 @@ async function main() {
   console.log('\n1 · Dashboard and per-user access');
   await page.goto(BASE, { waitUntil: 'networkidle' });
   check('dashboard renders', await page.locator('text=Matters').first().isVisible());
-  const counselMatters = await page.locator('a[href^="/matters/"]').count();
+  const counselMatters = await page.locator('.matter-item').count();
   check('counsel sees the department book of work', counselMatters >= 6, `${counselMatters} matters`);
   await shot(page, '01-dashboard');
 
   await context.addCookies([
-    { name: 'm3m_user', value: 'u-panel', url: BASE },
+    { name: 'rea_user', value: 'u-panel', url: BASE },
   ]);
   await page.goto(BASE, { waitUntil: 'networkidle' });
-  const panelMatters = await page.locator('a[href^="/matters/"]').count();
+  const panelMatters = await page.locator('.matter-item').count();
   check('panel counsel sees only their matter', panelMatters === 1, `${panelMatters} matters`);
 
   await page.goto(`${BASE}/matters/m-arb-turnkey`, { waitUntil: 'networkidle' });
@@ -79,7 +80,7 @@ async function main() {
     (await page.locator('text=Turnkey Structures').count()) === 0,
   );
 
-  await context.addCookies([{ name: 'm3m_user', value: 'u-counsel-1', url: BASE }]);
+  await context.addCookies([{ name: 'rea_user', value: 'u-counsel-1', url: BASE }]);
 
   // -- 2. The pleading filed against us -----------------------------------
   console.log('\n2 · Pleading analysis — the marquee ask');
@@ -142,26 +143,26 @@ async function main() {
   );
   await shot(page, '04-no-authority');
 
-  // -- 5. Where M3M has the better of it ----------------------------------
-  console.log('\n5 · A proposition available to M3M');
+  // -- 5. Where the developer has the better of it ------------------------
+  console.log('\n5 · A proposition available to the developer');
   await page.goto(`${BASE}/analyst`, { waitUntil: 'networkidle' });
   await page.fill(
     'textarea',
     'A landowner cannot claim the earlier acquisition lapsed where compensation was deposited in the treasury.',
   );
   await page.click('button:has-text("Analyse")');
-  await page.waitForSelector('text=/Available to M3M|Runs against M3M|Genuinely contested/', {
+  await page.waitForSelector('text=/Available to the developer|Runs against the developer|Genuinely contested/', {
     timeout: 20000,
   });
   check(
     'the verdict is that the position is available',
-    await page.locator('text=Available to M3M').first().isVisible(),
+    await page.locator('text=Available to the developer').first().isVisible(),
   );
   check(
     'Indore Development Authority is the assisting authority',
     (await page.locator('text=Indore Development Authority').count()) > 0,
   );
-  await shot(page, '05-available-to-m3m');
+  await shot(page, '05-available-to-developer');
 
   // -- 6. Repository -------------------------------------------------------
   console.log('\n6 · Repository');
@@ -203,10 +204,11 @@ async function main() {
 
   // -- 8. Trust and control -------------------------------------------------
   console.log('\n8 · Trust & Control');
+  await context.addCookies([{ name: 'rea_user', value: 'u-head', url: BASE }]);
   await page.goto(`${BASE}/admin`, { waitUntil: 'networkidle' });
-  check('routing table is shown', await page.locator('text=Model routing').isVisible());
-  check('audit log records residency', (await page.locator('text=Gurugram DC').count()) > 0);
-  check('cost comparison is present', await page.locator('text=Cost').first().isVisible());
+  check('control room is shown', await page.getByRole('heading', { name: 'Control Room' }).isVisible());
+  check('fixture mode is explicitly identified', (await page.locator('text=Demo fixture').count()) > 0);
+  check('activity is present', await page.getByRole('heading', { name: 'Activity' }).isVisible());
   await shot(page, '08-trust-and-control');
 
   await browser.close();

@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   const template = getTemplate(db, templateId);
   if (!template) return NextResponse.json({ error: 'Unknown template.' }, { status: 404 });
 
-  // Resolve the chosen clause per slot, defaulting to M3M's approved position.
+  // Resolve the chosen clause per slot, defaulting to the approved position.
   const choices: Record<string, Clause> = {};
   for (const slot of slotsIn(template.body)) {
     const options = clausesForSlot(db, slot);
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
               : 'All template variables were supplied.',
             rows.some((r) => r.deviates)
               ? `This draft departs from the approved position in ${rows.filter((r) => r.deviates).length} clause${rows.filter((r) => r.deviates).length === 1 ? '' : 's'}. See the redline before circulating.`
-              : 'Every clause is M3M\'s approved position. No redline required.',
+              : 'Every clause follows the approved position. No redline required.',
           ],
         },
         ...(rows.some((r) => r.deviates && r.selected.risk_note)

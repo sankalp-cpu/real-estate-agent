@@ -53,7 +53,7 @@ export interface Provider {
 const ROUTES: Record<Task, RouteDecision> = {
   draft_generation: {
     tier: 'tier-1',
-    model: 'm3m-draft-8b',
+    model: 'demo-draft-8b',
     deployment: 'on-premise',
     residency: 'IN — Gurugram DC',
     rationale:
@@ -62,7 +62,7 @@ const ROUTES: Record<Task, RouteDecision> = {
   },
   summarisation: {
     tier: 'tier-1',
-    model: 'm3m-draft-8b',
+    model: 'demo-draft-8b',
     deployment: 'on-premise',
     residency: 'IN — Gurugram DC',
     rationale: 'Extractive summarisation over supplied text. No reasoning over authority required.',
@@ -70,7 +70,7 @@ const ROUTES: Record<Task, RouteDecision> = {
   },
   extraction: {
     tier: 'tier-1',
-    model: 'm3m-draft-8b',
+    model: 'demo-draft-8b',
     deployment: 'on-premise',
     residency: 'IN — Gurugram DC',
     rationale: 'Structured extraction of grounds and clause references from a filed document.',
@@ -78,7 +78,7 @@ const ROUTES: Record<Task, RouteDecision> = {
   },
   proposition_analysis: {
     tier: 'tier-2',
-    model: 'm3m-legal-40b',
+    model: 'demo-legal-40b',
     deployment: 'on-premise',
     residency: 'IN — Gurugram DC',
     rationale:
@@ -87,7 +87,7 @@ const ROUTES: Record<Task, RouteDecision> = {
   },
   pleading_analysis: {
     tier: 'tier-2',
-    model: 'm3m-legal-40b',
+    model: 'demo-legal-40b',
     deployment: 'on-premise',
     residency: 'IN — Gurugram DC',
     rationale:
@@ -98,7 +98,7 @@ const ROUTES: Record<Task, RouteDecision> = {
 
 export const ESCALATION: RouteDecision = {
   tier: 'tier-3',
-  // Left unnamed deliberately: the frontier vendor is M3M's commercial choice at
+  // Left unnamed deliberately: the frontier vendor is the client's choice at
   // pilot, and the routing layer does not care which one sits behind this tier.
   model: 'configurable — frontier tier',
   deployment: 'india-region-cloud',

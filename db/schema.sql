@@ -1,4 +1,4 @@
--- M3M Legal AI Platform — schema
+-- Real Estate agent — schema
 -- SQLite with FTS5. The FTS tables are what make "grounded" a demonstrable
 -- property: every citation the system emits resolves to a row indexed here.
 
@@ -110,9 +110,9 @@ CREATE TABLE authorities (
   status_note     TEXT,
   superseded_by   TEXT REFERENCES authorities(id),
   source_url      TEXT NOT NULL,
-  -- Stance layer: M3M's editorial view, kept separate from the neutral case
+  -- Stance layer: the developer's editorial view, kept separate from the neutral case
   -- record above and labelled as advocacy in the interface. See db/seed/stances.ts.
-  favours         TEXT NOT NULL DEFAULT 'balanced' CHECK (favours IN ('m3m','opponent','balanced')),
+  favours         TEXT NOT NULL DEFAULT 'balanced' CHECK (favours IN ('developer','opponent','balanced')),
   counter_point   TEXT
 );
 
@@ -159,7 +159,7 @@ CREATE TABLE clauses (
   slot          TEXT NOT NULL,             -- which template slot this can fill
   title         TEXT NOT NULL,
   body          TEXT NOT NULL,
-  -- 'standard' is M3M's approved position; anything else redlines against it.
+  -- 'standard' is the developer's approved position; anything else redlines against it.
   variant       TEXT NOT NULL CHECK (variant IN ('standard','alternative','counterparty_favourable')),
   risk_level    TEXT NOT NULL CHECK (risk_level IN ('low','medium','high')),
   risk_note     TEXT,

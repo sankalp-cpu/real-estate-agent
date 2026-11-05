@@ -1,8 +1,8 @@
 {
-  "name": "m3m-legal-ai-prototype",
+  "name": "real-estate-agent",
   "version": "0.1.0",
   "private": true,
-  "description": "Litigation-focused legal AI prototype for M3M India — grounded precedent analysis, document repository and drafting studio.",
+  "description": "Real Estate agent — grounded precedent analysis, document repository and drafting studio.",
   "scripts": {
     "seed": "node --experimental-strip-types db/seed/index.ts",
     "dev": "next dev",

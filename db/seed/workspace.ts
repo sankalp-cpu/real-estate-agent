@@ -1,7 +1,7 @@
 /**
  * Workspace seed — users, matters, documents.
  *
- * All of it is fictional demonstration data constructed for the M3M walkthrough:
+ * All of it is fictional demonstration data constructed for the real estate walkthrough:
  * the people, the matters, the projects and the counterparties do not correspond
  * to real individuals or real proceedings. The case law referenced inside the
  * pleadings is real (see authorities.ts) because the point of the demo is that
@@ -22,7 +22,7 @@ export const USERS: SeedUser[] = [
   {
     id: 'u-head',
     name: 'Rajeev Menon',
-    email: 'rajeev.menon@m3m.example.in',
+    email: 'rajeev.menon@realestate.example.in',
     role: 'head_of_legal',
     designation: 'Head of Legal',
     office: 'Gurugram',
@@ -31,7 +31,7 @@ export const USERS: SeedUser[] = [
   {
     id: 'u-counsel-1',
     name: 'Ananya Sharma',
-    email: 'ananya.sharma@m3m.example.in',
+    email: 'ananya.sharma@realestate.example.in',
     role: 'counsel',
     designation: 'Senior Counsel — Litigation',
     office: 'Gurugram',
@@ -40,7 +40,7 @@ export const USERS: SeedUser[] = [
   {
     id: 'u-counsel-2',
     name: 'Vikram Desai',
-    email: 'vikram.desai@m3m.example.in',
+    email: 'vikram.desai@realestate.example.in',
     role: 'counsel',
     designation: 'Counsel — Contracts & Advisory',
     office: 'Gurugram',
@@ -49,7 +49,7 @@ export const USERS: SeedUser[] = [
   {
     id: 'u-para',
     name: 'Priya Nair',
-    email: 'priya.nair@m3m.example.in',
+    email: 'priya.nair@realestate.example.in',
     role: 'paralegal',
     designation: 'Legal Executive',
     office: 'Noida',
@@ -67,7 +67,7 @@ export const USERS: SeedUser[] = [
   {
     id: 'u-admin',
     name: 'Farah Qureshi',
-    email: 'farah.qureshi@m3m.example.in',
+    email: 'farah.qureshi@realestate.example.in',
     role: 'admin',
     designation: 'Legal Operations & IT',
     office: 'Gurugram',
@@ -95,12 +95,12 @@ export type SeedMatter = {
 export const MATTERS: SeedMatter[] = [
   {
     id: 'm-ncdrc-skyline',
-    reference: 'M3M/LIT/2026/041',
-    title: 'Skyline Residences Allottees Association v. M3M India',
+    reference: 'RE/LIT/2026/042',
+    title: 'Skyline Residences Allottees Association v. Developer',
     matterType: 'litigation',
     forum: 'NCDRC, New Delhi',
     counterparty: 'Skyline Residences Allottees Association (62 complainants)',
-    project: 'M3M Skyline Residences, Sector 79, Gurugram',
+    project: 'Skyline Residences, Sector 79, Gurugram',
     status: 'active',
     exposureInr: 486000000,
     nextDate: '2026-09-08',
@@ -117,12 +117,12 @@ export const MATTERS: SeedMatter[] = [
   },
   {
     id: 'm-ibc-notice',
-    reference: 'M3M/LIT/2026/047',
+    reference: 'RE/LIT/2026/047',
     title: 'Threatened Section 7 application — Skyline Residences allottees',
     matterType: 'litigation',
     forum: 'NCLT, Chandigarh Bench',
     counterparty: 'Group of 38 allottees',
-    project: 'M3M Skyline Residences, Sector 79, Gurugram',
+    project: 'Skyline Residences, Sector 79, Gurugram',
     status: 'active',
     exposureInr: 1240000000,
     nextDate: '2026-08-29',
@@ -137,17 +137,17 @@ export const MATTERS: SeedMatter[] = [
   },
   {
     id: 'm-arb-turnkey',
-    reference: 'M3M/LIT/2026/033',
-    title: 'M3M India v. Turnkey Structures Pvt. Ltd.',
+    reference: 'RE/LIT/2026/033',
+    title: 'Developer v. Turnkey Structures Pvt. Ltd.',
     matterType: 'litigation',
     forum: 'Arbitration — sole arbitrator',
     counterparty: 'Turnkey Structures Pvt. Ltd.',
-    project: 'M3M Corporate Park, Sector 65, Gurugram',
+    project: 'Corporate Park, Sector 65, Gurugram',
     status: 'active',
     exposureInr: 214000000,
     nextDate: '2026-09-19',
     summary:
-      'Claim against the EPC contractor for delay-linked liquidated damages and defective works. Contractor has challenged the constitution of the tribunal on the ground that the arbitrator was unilaterally appointed by M3M, and has raised a preliminary objection that the contract is insufficiently stamped.',
+      'Claim against the EPC contractor for delay-linked liquidated damages and defective works. Contractor has challenged the constitution of the tribunal on the ground that the arbitrator was unilaterally appointed by the developer, and has raised a preliminary objection that the contract is insufficiently stamped.',
     ownerId: 'u-counsel-2',
     createdAt: '2026-03-21T14:40:00Z',
     access: [
@@ -158,7 +158,7 @@ export const MATTERS: SeedMatter[] = [
   },
   {
     id: 'm-land-sector91',
-    reference: 'M3M/LIT/2026/019',
+    reference: 'RE/LIT/2026/019',
     title: 'Title and acquisition review — Sector 91 land parcel',
     matterType: 'advisory',
     forum: 'Punjab & Haryana High Court',
@@ -179,7 +179,7 @@ export const MATTERS: SeedMatter[] = [
   },
   {
     id: 'm-jd-sector113',
-    reference: 'M3M/CON/2026/112',
+    reference: 'RE/CON/2026/112',
     title: 'Joint development agreement — Sector 113 landowners',
     matterType: 'contract',
     forum: null,
@@ -189,7 +189,7 @@ export const MATTERS: SeedMatter[] = [
     exposureInr: 2100000000,
     nextDate: '2026-08-25',
     summary:
-      'Negotiation of a joint development agreement with a landowner consortium. Open points: whether the agreement creates an interest in the land in M3M\'s favour, the revenue share waterfall, and the dispute resolution clause.',
+      'Negotiation of a joint development agreement with a landowner consortium. Open points: whether the agreement creates an interest in the land in the developer\'s favour, the revenue share waterfall, and the dispute resolution clause.',
     ownerId: 'u-counsel-2',
     createdAt: '2026-06-30T08:50:00Z',
     access: [
@@ -199,7 +199,7 @@ export const MATTERS: SeedMatter[] = [
   },
   {
     id: 'm-rera-compliance',
-    reference: 'M3M/ADV/2026/008',
+    reference: 'RE/ADV/2026/008',
     title: 'RERA compliance review — ongoing projects',
     matterType: 'advisory',
     forum: 'Haryana RERA, Gurugram',
@@ -247,7 +247,7 @@ export type SeedDocument = {
 };
 
 /**
- * The hero input. This is the pleading filed against M3M — the exact workflow the
+ * The hero input. This is the pleading filed against the developer — the exact workflow the
  * client described: "a pleading has been filed against me asserting a point of law;
  * research it and tell me whether it is available to me or against me."
  */
@@ -256,7 +256,7 @@ CONSUMER CASE NO. 1184 OF 2026
 
 Skyline Residences Allottees Association & Ors.                     ... Complainants
                                     versus
-M3M India Pvt. Ltd.                                                 ... Opposite Party
+Real Estate Development Pvt. Ltd.                                   ... Opposite Party
 
 COMPLAINT UNDER SECTION 35 OF THE CONSUMER PROTECTION ACT, 2019
 
@@ -372,7 +372,7 @@ export const DOCUMENTS: SeedDocument[] = [
         para: 'Para 4',
         heading: 'Financial debt',
         body:
-          'Our clients are allottees of the Skyline Residences project and are financial creditors of M3M India Pvt. Ltd. within the meaning of Section 5(7) read with the Explanation to Section 5(8)(f) of the Insolvency and Bankruptcy Code, 2016, the amounts raised from them having the commercial effect of a borrowing.',
+          'Our clients are allottees of the Skyline Residences project and are financial creditors of Real Estate Development Pvt. Ltd. within the meaning of Section 5(7) read with the Explanation to Section 5(8)(f) of the Insolvency and Bankruptcy Code, 2016, the amounts raised from them having the commercial effect of a borrowing.',
       },
       {
         page: 3,
@@ -460,7 +460,7 @@ export const DOCUMENTS: SeedDocument[] = [
   {
     id: 'doc-standard-aba',
     matterId: null,
-    title: 'M3M standard Apartment Buyer\'s Agreement — approved template v6.2',
+    title: 'Standard Apartment Buyer\'s Agreement — approved template v6.2',
     docType: 'policy',
     source: 'upload',
     ocrStatus: 'indexed',
@@ -506,7 +506,7 @@ export const DOCUMENTS: SeedDocument[] = [
         para: 'Extract 1',
         heading: 'Project summary',
         body:
-          'Project: M3M Skyline Residences, Sector 79, Gurugram. Total units 604. Units sold 588. Aggregate collections as at 31 July 2026: Rs. 1,842 crore. Registered completion date under Haryana RERA: 31 December 2023. Revised completion date sought: 30 June 2026. Occupation certificate: applied 14 March 2026, pending.',
+          'Project: Skyline Residences, Sector 79, Gurugram. Total units 604. Units sold 588. Aggregate collections as at 31 July 2026: Rs. 1,842 crore. Registered completion date under Haryana RERA: 31 December 2023. Revised completion date sought: 30 June 2026. Occupation certificate: applied 14 March 2026, pending.',
       },
       {
         page: 2,

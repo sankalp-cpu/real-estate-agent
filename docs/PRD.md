@@ -1,16 +1,16 @@
-# M3M Legal AI Platform — Product Requirements Document
+# Real Estate agent — Product Requirements Document
 
 **Version:** 0.1 (prototype spec)
 **Date:** August 2026
 **Owner:** 360 Labs
-**Client:** M3M India — Legal Department
+**Client:** Real estate developer — Legal Department
 **Source:** Discovery call, 12 August 2026
 
 ---
 
 ## 1. Problem
 
-M3M's legal department runs on five shared Claude accounts serving a core team of 10–12 counsel and
+The example legal department runs on five shared AI accounts serving a core team of 10–12 counsel and
 roughly 40 people across offices. The tooling works for isolated drafting tasks and has become a
 bottleneck for everything else.
 
@@ -69,7 +69,7 @@ support it, the authorities that cut against it, an applicability verdict, and p
 paragraphs. Contrary authority is surfaced by default, not on request — counsel needs to know what the
 other side will cite.
 
-**Pleading analysis.** Counsel uploads or pastes the pleading filed against M3M. The system extracts
+**Pleading analysis.** Counsel uploads or pastes the pleading filed against the developer. The system extracts
 each point of law asserted, researches each one independently, and returns — for every point — the
 supporting authorities, the contrary authorities, and a **counter-argument outline with pin cites**
 that counsel can take into a draft reply.
@@ -80,7 +80,7 @@ overruled judgment is flagged in red and the superseding decision is named. This
 chat assistants fail hardest, because their training cutoff silently freezes the law.
 
 **Practice areas at launch:** RERA and delayed possession, consumer (NCDRC/SCDRC), IBC and NCLT,
-arbitration, land acquisition and title. These are the forums M3M actually litigates in.
+arbitration, land acquisition and title. These are the example developer's litigation practice areas.
 
 ### 3.2 Enterprise Brain — repository and grounding
 
@@ -121,7 +121,7 @@ treats it as five people typing alone.
 a small on-premise model; litigation reasoning escalates. The routing decision, the model used, the
 latency and the cost are shown on every response — no black box.
 
-**Data residency.** Deployment on Indian infrastructure or M3M's own servers. Every record carries its
+**Data residency (production requirement, not a demo claim).** Deployment on Indian infrastructure or the client's own servers. Every record carries its
 residency, and the audit log records where each request was processed. DPDP compliance becomes
 demonstrable rather than asserted.
 
@@ -163,7 +163,7 @@ passage, or the build fails.
 ## 5. Model strategy
 
 The intelligence needed for legal work is narrow and deep. A frontier general-purpose model is
-simultaneously an expert physician, accountant and sports therapist — M3M is paying for all of it, and
+simultaneously an expert physician, accountant and sports therapist — the client is paying for all of it, and
 waiting for all of it, to get a legal answer.
 
 | Tier | Model | Deployment | Tasks |
@@ -173,7 +173,7 @@ waiting for all of it, to get a legal answer.
 | **3** | Frontier model | India-region cloud | Novel propositions, multi-issue strategy, escalation only |
 
 The routing rules are explicit and configurable, and the split is where the economics come from:
-volume work never touches Tier 3, and Tier 1–2 run on hardware M3M controls — which fixes latency and
+volume work never touches Tier 3, and Tier 1–2 run on hardware the client controls — which fixes latency and
 DPDP residency in the same move.
 
 **Expected effect on the two headline complaints:** on-premise inference removes the queue that turned
@@ -189,7 +189,7 @@ DPDP is tightening around.
 - **No e-filing.** No automated submission to any court, tribunal or registry in v1.
 - **No unattended drafting.** Every draft is reviewed before it leaves the building.
 - **Not a case management or billing system.** It integrates with one; it does not replace one.
-- **Not a replacement for licensed legal databases** in v1 — it indexes what M3M is licensed to index.
+- **Not a replacement for licensed legal databases** in v1 — it indexes what the client is licensed to index.
 
 ---
 
@@ -197,8 +197,8 @@ DPDP is tightening around.
 
 | Phase | Scope | Outcome |
 |---|---|---|
-| **Prototype** *(this repo)* | Litigation Analyst, repository, drafting studio, workspace, admin — on a curated demo corpus | Demonstrable, hands-on system for M3M to evaluate |
-| **Pilot** | One practice area end to end. Real M3M corpus ingested. On-premise models deployed and benchmarked. 10–12 users. | Measured latency, cost and quality against the current baseline |
+| **Prototype** *(this repo)* | Litigation Analyst, repository, drafting studio, workspace, admin — on a curated demo corpus | Demonstrable, hands-on system for a real estate legal team to evaluate |
+| **Pilot** | One practice area end to end. Real client corpus ingested. On-premise models deployed and benchmarked. 10–12 users. | Measured latency, cost and quality against the current baseline |
 | **Production** | All practice areas, full user base, ERP/CRM connectors, licensed case-law feed, SSO, DR | Departmental system of record |
 
 ---
@@ -244,8 +244,8 @@ What is built in this repository, and what is deliberately simulated.
 - Template and clause assembly with redline
 
 **Simulated, and labelled as such in the interface:**
-- On-premise model inference (a deterministic provider stands in for the local model; an Anthropic
-  adapter is available behind an environment flag)
+- On-premise model inference (a deterministic provider stands in for the local model; a Replit AI
+  adapter is available behind an environment flag and requires managed configuration)
 - OCR (pipeline states are real; the text is pre-extracted)
 - ERP/CRM connectivity (fixture data on the real query path)
 
